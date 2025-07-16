@@ -1,0 +1,176 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    /* Using a darker, more abstract background image */
+    background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+    background-size: cover;
+    scroll-behavior: smooth;
+    min-height: 100vh; /* Use min-height to allow scrolling */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1001;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -220px; /* Hidden by default */
+    width: 200px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Darker, more opaque sidebar */
+    backdrop-filter: blur(20px);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    padding-top: 80px; /* More padding for toggle button */
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+    border-right: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 25px 0; /* Increased margin */
+}
+
+.sidebar ul li a {
+    color: #e0e0e0; /* Lighter text for contrast */
+    text-decoration: none;
+    padding: 12px 25px; /* Increased padding */
+    display: block;
+    font-weight: 600;
+    border-radius: 8px; /* Slightly more rounded */
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+.sidebar ul li a:hover {
+    background: rgba(255, 255, 255, 0.1); /* Subtle hover */
+    color: #fff;
+    transform: translateX(5px); /* Slight movement on hover */
+}
+
+.container {
+    margin-left: 0; /* No initial margin, sidebar will push content */
+    padding: 80px 30px 30px 30px;
+    transition: margin-left 0.3s ease;
+}
+
+/* When sidebar is active, push container */
+.container.sidebar-active {
+    margin-left: 220px;
+}
+
+.panel {
+    background: rgba(255, 255, 255, 0.1); /* More transparent for glass effect */
+    backdrop-filter: blur(25px); /* Stronger blur */
+    padding: 35px; /* More padding */
+    border-radius: 25px; /* More rounded corners */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); /* Stronger, diffused shadow */
+    margin-bottom: 40px;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle border */
+}
+
+form input[type="file"],
+form button {
+    width: 100%;
+    padding: 15px; /* Larger padding */
+    margin-top: 20px; /* More margin */
+    border: none;
+    border-radius: 10px; /* More rounded */
+    background: rgba(255, 255, 255, 0.15); /* Slightly more opaque */
+    color: #fff;
+    backdrop-filter: blur(10px);
+    font-size: 16px;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input[type="file"]::file-selector-button {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+form input[type="file"]::file-selector-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+form button {
+    font-weight: bold;
+    cursor: pointer;
+    background-color: rgb(145, 198, 255); /* A distinct button color */
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+form button:hover {
+    background-color: rgb(0, 123, 255);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+h2, h3 {
+    color: #fff;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.4); /* Stronger text shadow */
+    margin-bottom: 20px;
+}
+
+p, ul li {
+    color: #e0e0e0; /* Lighter text for readability */
+    line-height: 1.6;
+}
+
+img {
+    border-radius: 15px; /* More rounded */
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4); /* Stronger shadow */
+    max-width: 100%;
+    margin-top: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 180px;
+        padding-top: 60px;
+    }
+    .container {
+        padding: 60px 20px 20px 20px;
+    }
+    .container.sidebar-active {
+        margin-left: 0; /* On small screens, sidebar overlays */
+    }
+    .menu-toggle {
+        font-size: 24px;
+        padding: 8px 12px;
+    }
+}
