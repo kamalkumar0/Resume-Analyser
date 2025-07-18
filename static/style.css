@@ -174,3 +174,26 @@ img {
         padding: 8px 12px;
     }
 }
+
+.loading-bar {
+    width: 100%;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 20px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+.loading-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    animation: loading 2s infinite;
+}
+
+@keyframes loading {
+    0% { width: 0%; }
+    50% { width: 100%; }
+    100% { width: 0%; }
+}
