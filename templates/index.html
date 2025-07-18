@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Resume Classifier</title>
@@ -8,6 +9,7 @@
     <!-- Font Awesome for menu icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
 
     <!-- Menu Toggle Button -->
@@ -32,11 +34,17 @@
         <!-- Upload Section -->
         <section class="panel" id="upload">
             <h2>🔍 Upload Resume</h2>
-            <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
                 <label for="resume-file" style="display: none;">Upload your resume</label>
                 <input type="file" name="resume" id="resume-file" required accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
                 <button type="submit">Analyze Resume</button>
             </form>
+            <div id="loading-container" style="display:none; margin-top: 20px;">
+                <div class="loading-bar">
+                    <div class="loading-fill"></div>
+                </div>
+                <p style="color:white; text-align:center;">Analyzing your resume...</p>
+            </div>
             <p style="font-size: 0.9em; margin-top: 10px; color: rgba(255,255,255,0.7);">
                 Supported formats: PDF, DOCX, JPG, JPEG, PNG (DOCX/Image parsing is a future enhancement)
             </p>
@@ -49,10 +57,10 @@
             <p><strong>Total Words:</strong> {{ total_words }}</p>
             <p><strong>Keyword Density (Python):</strong> {{ keyword_density }}%</p>
             {% if skill_chart %}
-                <h4>Your Skills Overview:</h4>
-                <img src="data:image/png;base64,{{ skill_chart }}" alt="Skill Chart">
+            <h4>Your Skills Overview:</h4>
+            <img src="data:image/png;base64,{{ skill_chart }}" alt="Skill Chart">
             {% else %}
-                <p>No skills detected or chart could not be generated.</p>
+            <p>No skills detected or chart could not be generated.</p>
             {% endif %}
             <!-- Placeholder for more insights like skills matched vs missing, education/experience graphs -->
             <p style="font-size: 0.9em; margin-top: 20px; color: rgba(255,255,255,0.7);">
@@ -73,13 +81,13 @@
         <section class="panel" id="recommendation">
             <h3>💡 Recommended Job Roles</h3>
             {% if recommended_roles %}
-                <ul>
-                    {% for role in recommended_roles %}
-                    <li>{{ role }}</li>
-                    {% endfor %}
-                </ul>
+            <ul>
+                {% for role in recommended_roles %}
+                <li>{{ role }}</li>
+                {% endfor %}
+            </ul>
             {% else %}
-                <p>No specific roles recommended based on detected skills. Try adding more relevant keywords!</p>
+            <p>No specific roles recommended based on detected skills. Try adding more relevant keywords!</p>
             {% endif %}
         </section>
 
@@ -87,13 +95,13 @@
         <section class="panel" id="tips">
             <h3>🧠 Resume Improvement Tips</h3>
             {% if smart_tips %}
-                <ul>
-                    {% for tip in smart_tips %}
-                    <li>{{ tip }}</li>
-                    {% endfor %}
-                </ul>
+            <ul>
+                {% for tip in smart_tips %}
+                <li>{{ tip }}</li>
+                {% endfor %}
+            </ul>
             {% else %}
-                <p>Your resume looks great! Keep up the good work.</p>
+            <p>Your resume looks great! Keep up the good work.</p>
             {% endif %}
         </section>
         {% endif %}
@@ -117,7 +125,14 @@
                 mainContainer.classList.remove('sidebar-active');
             });
         });
+
+        function showLoader() {
+            document.getElementById("loading-container").style.display = "block";
+        }
+
+
     </script>
 
 </body>
+
 </html>
