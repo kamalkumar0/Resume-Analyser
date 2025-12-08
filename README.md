@@ -3,6 +3,7 @@
 An AI-based Resume Analyzer with a simple UI that analyzes keywords, skills, and ATS compatibility.
 
 LinkedIn: https://www.linkedin.com/kamalkumar0 
+Live Demo : https://huggingface.co/spaces/kamalsharma0/Resume_Analyser2.0
 
 ---
 
