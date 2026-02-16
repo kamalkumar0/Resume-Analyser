@@ -106,9 +106,6 @@ The goal is to help users improve their chances of getting shortlisted.
 ## ⚙️ How To Run Locally
 
 ```bash
-git clone https://github.com/your-username/resume-analyzer.git
-cd resume-analyzer
-
 pip install -r requirements.txt
 python app.py
 ```
