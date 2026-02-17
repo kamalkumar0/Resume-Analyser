@@ -1,138 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Resume Classifier</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for menu icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeAI - Smart Analyzer</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        /* Modern UI Color Palette & Reset */
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
 
+        /* Sidebar Styling */
+        .sidebar { width: 260px; background-color: var(--card-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+        .logo { padding: 24px; display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: bold; }
+        .logo-icon { background: var(--primary); color: white; padding: 8px; border-radius: 8px; }
+        .nav { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: var(--text-muted); font-weight: 500; border-radius: 10px; transition: 0.2s; cursor: pointer; }
+        .nav-item.active, .nav-item:hover { background-color: #eef2ff; color: var(--primary); }
+
+        /* Main Content Styling */
+        .main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
+        .header { background: var(--card-bg); padding: 16px 32px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .user-avatar { width: 36px; height: 36px; background: #e0e7ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        
+        .container { padding: 32px; max-width: 1100px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 24px; }
+
+        /* Cards & Containers */
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card-header { margin-bottom: 20px; }
+        .card-title { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+        .card-subtitle { color: var(--text-muted); font-size: 14px; }
+
+        /* Upload Area */
+        .upload-zone { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px 20px; text-align: center; background: #f8fafc; position: relative; transition: 0.3s; cursor: pointer; margin-bottom: 16px; }
+        .upload-zone:hover { border-color: var(--primary); background: #eef2ff; }
+        .upload-zone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        .upload-icon { font-size: 48px; color: var(--primary); margin-bottom: 12px; }
+        
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-container { display: flex; justify-content: flex-end; }
+
+        /* Grids for Results */
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+        /* Metric Cards */
+        .metric-card { text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 32px; }
+        .metric-icon { font-size: 24px; margin-bottom: 12px; padding: 12px; border-radius: 12px; }
+        .icon-blue { background: #e0f2fe; color: #0284c7; }
+        .icon-green { background: #dcfce7; color: #16a34a; }
+        .metric-value { font-size: 42px; font-weight: bold; color: var(--text-dark); margin-bottom: 4px; }
+        .metric-label { color: var(--text-muted); font-weight: 500; font-size: 16px; }
+
+        /* Tags & Lists */
+        .tags { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tag { background: #f1f5f9; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; font-size: 15px; font-weight: 500; color: #334155; }
+        .tips-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+        .tips-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; color: #475569; padding: 12px; background: #f8fafc; border-radius: 8px; }
+        .tips-list i { color: var(--primary); font-size: 22px; }
+
+        /* Dark Mode Chart Container */
+        .chart-container { background: #0f172a; border-radius: 16px; padding: 24px; margin-top: 20px; color: white; text-align: center; }
+        .chart-container img { max-width: 100%; height: auto; margin-top: 16px; }
+
+        /* --- TABS CSS (Yahan magic ho raha hai) --- */
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Empty State Styling */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .empty-state i { font-size: 64px; color: #cbd5e1; margin-bottom: 16px; }
+
+        /* Loading Animation */
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(5px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; visibility: hidden; opacity: 0; transition: 0.3s ease; }
+        .loading-overlay.active { visibility: visible; opacity: 1; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #e0e7ff; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Circular Progress for Match Score */
+        .circular-progress { position: relative; width: 180px; height: 180px; display: flex; justify-content: center; align-items: center; margin: 0 auto; }
+        .circular-progress svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .circular-progress circle { fill: none; stroke-width: 3.5; }
+        .circular-progress .bg { stroke: #e2e8f0; }
+        .circular-progress .progress { stroke: var(--primary); stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
+        .progress-text { position: absolute; font-size: 38px; font-weight: bold; color: var(--text-dark); }
+    </style>
+</head>
 <body>
 
-    <!-- Menu Toggle Button -->
-    <div class="menu-toggle" id="menu-toggle">
-        <i class="fas fa-bars"></i>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Analyzing Resume...</div>
+        <div style="color: var(--text-muted);">Extracting skills and calculating match score</div>
     </div>
 
-    <!-- Sidebar Navigation -->
-    <div class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="#upload">📄 Upload</a></li>
-            <li><a href="#insights">📊 Insights</a></li>
-            <li><a href="#matchscore">🎯 Match Score</a></li>
-            <li><a href="#recommendation">💡 Role Suggestion</a></li>
-            <li><a href="#tips">🧠 Smart Tips</a></li>
-        </ul>
-    </div>
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="ph ph-briefcase"></i></div>
+            Resume<span style="color: var(--primary)">AI</span>
+        </div>
+        <nav class="nav">
+            <a class="nav-item active" id="nav-upload" onclick="switchTab('upload')"><i class="ph ph-upload-simple"></i> Upload</a>
+            <a class="nav-item" id="nav-insights" onclick="switchTab('insights')"><i class="ph ph-chart-bar"></i> Insights</a>
+            <a class="nav-item" id="nav-match" onclick="switchTab('match')"><i class="ph ph-target"></i> Match Score</a>
+            <a class="nav-item" id="nav-tips" onclick="switchTab('tips')"><i class="ph ph-lightbulb"></i> Smart Tips</a>
+        </nav>
+    </aside>
 
-    <!-- Main Content -->
-    <div class="container" id="main-container">
-
-        <!-- Upload Section -->
-        <section class="panel" id="upload">
-            <h2>🔍 Upload Resume</h2>
-            <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
-                <label for="resume-file" style="display: none;">Upload your resume</label>
-                <input type="file" name="resume" id="resume-file" required accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                <button type="submit">Analyze Resume</button>
-            </form>
-            <div id="loading-container" style="display:none; margin-top: 20px;">
-                <div class="loading-bar">
-                    <div class="loading-fill"></div>
-                </div>
-                <p style="color:white; text-align:center;">Analyzing your resume...</p>
+    <main class="main">
+        <header class="header">
+            <h2 id="pageTitle" style="font-size: 18px; font-weight: 600;">Upload Resume</h2>
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <i class="ph ph-bell" style="font-size: 24px; color: var(--text-muted); cursor: pointer;"></i>
+                <div class="user-avatar">KS</div>
             </div>
-            <p style="font-size: 0.9em; margin-top: 10px; color: rgba(255,255,255,0.7);">
-                Supported formats: PDF, DOCX, JPG, JPEG, PNG (DOCX/Image parsing is a future enhancement)
-            </p>
-        </section>
+        </header>
 
-        {% if prediction %}
-        <!-- Insights Section -->
-        <section class="panel" id="insights">
-            <h3>📊 Resume Insights</h3>
-            <p><strong>Total Words:</strong> {{ total_words }}</p>
-            <p><strong>Keyword Density (Python):</strong> {{ keyword_density }}%</p>
-            {% if skill_chart %}
-            <h4>Your Skills Overview:</h4>
-            <img src="data:image/png;base64,{{ skill_chart }}" alt="Skill Chart">
-            {% else %}
-            <p>No skills detected or chart could not be generated.</p>
-            {% endif %}
-            <!-- Placeholder for more insights like skills matched vs missing, education/experience graphs -->
-            <p style="font-size: 0.9em; margin-top: 20px; color: rgba(255,255,255,0.7);">
-                *More detailed insights (e.g., missing skills, education/experience graphs) are under development.
-            </p>
-        </section>
+        <div class="container">
+            
+            <div id="tab-upload" class="tab-content active">
+                <section class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Analyze New Resume</h3>
+                        <p class="card-subtitle">Upload a PDF file to extract skills, match scores, and get AI-driven insights.</p>
+                    </div>
 
-        <!-- Match Score Section -->
-        <section class="panel" id="matchscore">
-            <h3>🎯 Skill-Job Match Score</h3>
-            <p>Your resume matches this role <strong>{{ match_score }}%</strong></p>
-            <p style="font-size: 0.9em; margin-top: 10px; color: rgba(255,255,255,0.7);">
-                (Based on a dummy Python Developer job description)
-            </p>
-        </section>
+                    <form id="uploadForm" action="/" method="POST" enctype="multipart/form-data">
+                        <div class="upload-zone">
+                            <input type="file" name="resume" id="fileInput" required accept=".pdf,.doc,.docx">
+                            <i class="ph ph-cloud-arrow-up upload-icon"></i>
+                            <h4 id="fileNameDisplay" style="margin-bottom: 8px; font-weight: 600;">Drag & drop your file here, or click to browse</h4>
+                            <p style="color: var(--text-muted); font-size: 13px;">Supported formats: PDF, DOCX (Max 5MB)</p>
+                        </div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn"><i class="ph ph-sparkle"></i> Analyze Resume</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
 
-        <!-- Role Recommendation -->
-        <section class="panel" id="recommendation">
-            <h3>💡 Recommended Job Roles</h3>
-            {% if recommended_roles %}
-            <ul>
-                {% for role in recommended_roles %}
-                <li>{{ role }}</li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p>No specific roles recommended based on detected skills. Try adding more relevant keywords!</p>
-            {% endif %}
-        </section>
+            <div id="tab-insights" class="tab-content">
+                {% if total_words > 0 %}
+                    <div class="grid-2" style="margin-bottom: 20px;">
+                        <div class="card metric-card">
+                            <div class="metric-icon icon-blue"><i class="ph ph-crosshair"></i></div>
+                            <div class="metric-value">{{ keyword_density }}<span style="font-size: 20px; font-weight: normal;">%</span></div>
+                            <div class="metric-label">Keyword Density</div>
+                        </div>
+                        <div class="card metric-card">
+                            <div class="metric-icon icon-green"><i class="ph ph-text-aa"></i></div>
+                            <div class="metric-value">{{ total_words }}</div>
+                            <div class="metric-label">Total Words Parsed</div>
+                        </div>
+                    </div>
 
-        <!-- Smart Tips -->
-        <section class="panel" id="tips">
-            <h3>🧠 Resume Improvement Tips</h3>
-            {% if smart_tips %}
-            <ul>
-                {% for tip in smart_tips %}
-                <li>{{ tip }}</li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p>Your resume looks great! Keep up the good work.</p>
-            {% endif %}
-        </section>
-        {% endif %}
+                    <div class="card">
+                        <h4 style="font-size: 18px; margin-bottom: 16px; display: flex; gap: 8px; align-items: center;">
+                            <i class="ph ph-star" style="color: #f59e0b;"></i> AI Recommended Roles
+                        </h4>
+                        {% if recommended_roles %}
+                            <div class="tags">
+                                {% for role in recommended_roles %}
+                                    <span class="tag">{{ role }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p style="color: var(--text-muted);">No specific roles identified based on your skills.</p>
+                        {% endif %}
+                    </div>
 
-    </div>
+                    {% if skill_chart %}
+                    <div class="chart-container">
+                        <h4 style="font-size: 18px; display: flex; gap: 8px; align-items: center; justify-content: center;">
+                            <i class="ph ph-chart-polar" style="color: #818cf8;"></i> Skills Distribution Matrix
+                        </h4>
+                        <img src="data:image/png;base64,{{ skill_chart }}" alt="Extracted Skills Chart">
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="card empty-state">
+                        <i class="ph ph-files"></i>
+                        <h3>No Data Available</h3>
+                        <p style="margin-top: 8px;">Please upload a resume first to view insights.</p>
+                        <button class="btn" style="margin-top: 20px;" onclick="switchTab('upload')">Go to Upload</button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="tab-match" class="tab-content">
+                {% if total_words > 0 %}
+                    <div class="card" style="text-align: center; padding: 60px 20px;">
+                        <h3 style="font-size: 24px; margin-bottom: 10px;">Job Fitment Score</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 40px;">Based on our AI analysis against the target job description.</p>
+                        
+                        <div class="circular-progress">
+                            <svg viewBox="0 0 36 36">
+                                <circle class="bg" cx="18" cy="18" r="16"></circle>
+                                <circle class="progress" cx="18" cy="18" r="16" stroke-dasharray="{{ match_score }}, 100"></circle>
+                            </svg>
+                            <div class="progress-text">{{ match_score }}%</div>
+                        </div>
+                        
+                        <p style="margin-top: 40px; font-weight: 500; color: #16a34a;">
+                            <i class="ph ph-check-circle" style="vertical-align: middle;"></i> Analysis Complete
+                        </p>
+                    </div>
+                {% else %}
+                    <div class="card empty-state">
+                        <i class="ph ph-target"></i>
+                        <h3>No Score Generated</h3>
+                        <p style="margin-top: 8px;">Upload a resume to calculate the ATS match score.</p>
+                        <button class="btn" style="margin-top: 20px;" onclick="switchTab('upload')">Go to Upload</button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="tab-tips" class="tab-content">
+                {% if total_words > 0 %}
+                    <div class="card">
+                        <h4 style="font-size: 22px; margin-bottom: 24px; display: flex; gap: 10px; align-items: center;">
+                            <i class="ph ph-magic-wand" style="color: #a855f7;"></i> Actionable Improvement Tips
+                        </h4>
+                        {% if smart_tips %}
+                            <ul class="tips-list">
+                                {% for tip in smart_tips %}
+                                    <li><i class="ph ph-lightbulb-filament"></i> <span>{{ tip }}</span></li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p style="color: var(--text-muted);">Your resume looks fantastic! No critical tips at the moment.</p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="card empty-state">
+                        <i class="ph ph-lightbulb"></i>
+                        <h3>No Tips Available</h3>
+                        <p style="margin-top: 8px;">Upload your resume to get AI-generated smart tips.</p>
+                        <button class="btn" style="margin-top: 20px;" onclick="switchTab('upload')">Go to Upload</button>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </main>
 
     <script>
-        const menuToggle = document.getElementById('menu-toggle');
-        const sidebar = document.getElementById('sidebar');
-        const mainContainer = document.getElementById('main-container');
+        // 1. Tab Switching Function
+        const pageTitles = {
+            'upload': 'Upload Resume',
+            'insights': 'Resume Insights',
+            'match': 'ATS Match Score',
+            'tips': 'Smart Tips & Feedback'
+        };
 
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            mainContainer.classList.toggle('sidebar-active');
-        });
+        function switchTab(tabId) {
+            // Remove active classes from all nav items and tabs
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
 
-        // Close sidebar when a link is clicked (for better mobile UX)
-        document.querySelectorAll('.sidebar ul li a').forEach(link => {
-            link.addEventListener('click', () => {
-                sidebar.classList.remove('active');
-                mainContainer.classList.remove('sidebar-active');
-            });
-        });
+            // Add active class to the clicked nav item and matching tab content
+            document.getElementById('nav-' + tabId).classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
 
-        function showLoader() {
-            document.getElementById("loading-container").style.display = "block";
+            // Update top header title dynamically
+            document.getElementById('pageTitle').textContent = pageTitles[tabId];
         }
 
+        // 2. Auto-Switch to Insights AFTER successful upload
+        // Jinja logic checks if backend sent data
+        {% if total_words > 0 %}
+            window.onload = function() {
+                switchTab('insights');
+            };
+        {% endif %}
 
+        // 3. Update File Name in Drag & Drop box
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            var fileName = e.target.files[0] ? e.target.files[0].name : 'Drag & drop your file here, or click to browse';
+            var display = document.getElementById('fileNameDisplay');
+            display.textContent = fileName;
+            display.style.color = 'var(--primary)';
+        });
+
+        // 4. Loading Overlay display on submit
+        document.getElementById('uploadForm').addEventListener('submit', function() {
+            if(document.getElementById('fileInput').files.length > 0) {
+                document.getElementById('loadingOverlay').classList.add('active');
+            }
+        });
     </script>
-
 </body>
-
 </html>
