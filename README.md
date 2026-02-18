@@ -84,22 +84,20 @@ The goal is to help users improve their chances of getting shortlisted.
 ## 📸 Screenshots
 
 ### Step 1 — UI Display
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0387d48f-6e44-42a1-a215-b9a98c54c395" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/27728f9d-8a9a-4f28-833a-44c49ec3ba2d" />
 
-### Step 2 — Resume Uploading
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/38b07019-e539-44d6-9546-26a1b6d426e2" />
-
+### Step 2 — Resume Uploading 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/47373d71-bb97-4439-8a3d-27880ff6ffca" />
 
 ### Step 3 — Processing
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9cddc03a-5a08-4741-8fa7-31e484b4e51c" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/99e036ed-f41f-47e0-a80e-508a27786eee" />
 
 ### Step 4 — Skills Extraction
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/5002ab35-0da2-45d2-a949-7ef11e2679f4" />
-
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7777c660-46e4-4777-8de1-bed1da350387" />
 
 ### Step 5 — Resume Score/Suggestions
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f815fd96-0e33-4586-af9e-73d048ee5385" />
-
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7bc2aece-89de-44dd-ab58-c98191598cca" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/497ea1e5-989b-478a-a5de-3d1851b2447d" />
 
 ---
 
@@ -136,7 +134,7 @@ Suggestions and improvements are always welcome.
 
 ## 👨‍💻 Author
 
-Kamal Sharma
+Kamal Kumar
 
 If you found this project useful, feel free to connect with me on LinkedIn.
 
