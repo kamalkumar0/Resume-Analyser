@@ -81,23 +81,8 @@ The goal is to help users improve their chances of getting shortlisted.
 
 ---
 
-## 📸 Screenshots
-
-### Step 1 — UI Display
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/27728f9d-8a9a-4f28-833a-44c49ec3ba2d" />
-
-### Step 2 — Resume Uploading 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/47373d71-bb97-4439-8a3d-27880ff6ffca" />
-
-### Step 3 — Processing
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/99e036ed-f41f-47e0-a80e-508a27786eee" />
-
-### Step 4 — Skills Extraction
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7777c660-46e4-4777-8de1-bed1da350387" />
-
-### Step 5 — Resume Score/Suggestions
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7bc2aece-89de-44dd-ab58-c98191598cca" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/497ea1e5-989b-478a-a5de-3d1851b2447d" />
+## 📸 ScreenView :
+https://github.com/user-attachments/assets/24436f44-21bd-4ded-890c-98b5f00a4e0a
 
 ---
 
