@@ -4,7 +4,7 @@ This project is an AI-based Resume Analyzer that helps users understand how stro
 
 The idea behind building this project was simple — many students and job seekers don’t know why their resumes get rejected. So I created a tool that analyzes resumes using NLP techniques and gives feedback like extracted skills, score, and improvement suggestions.
 
-🔗 Live Demo: https://huggingface.co/spaces/kamalsharma0/Resume_Analyser2.0](https://huggingface.co/spaces/kamalsharma0/Resume_Analyzer
+🔗 Live Demo: https://huggingface.co/spaces/kamalsharma0/Resume_Analyzer
 🔗 LinkedIn: https://www.linkedin.com/kamalkumar0
 
 ---
